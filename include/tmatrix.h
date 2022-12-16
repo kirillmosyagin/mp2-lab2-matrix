@@ -15,6 +15,7 @@ using namespace std;
 const int MAX_VECTOR_SIZE = 100000000;
 const int MAX_MATRIX_SIZE = 10000;
 
+
 // Динамический вектор - 
 // шаблонный вектор на динамической памяти
 template<typename T>
@@ -32,6 +33,8 @@ public:
   }
   TDynamicVector(T* arr, size_t s) : sz(s)
   {
+    if (sz == 0 || sz > 100000000)
+        throw out_of_range("Array size should be greater than zero and less than 100000000");
     assert(arr != nullptr && "TDynamicVector ctor requires non-nullptr arg");
     pMem = new T[sz];
     std::copy(arr, arr + sz, pMem);
@@ -80,7 +83,7 @@ public:
   //заполнение случайными числами (int)
   void set_rand_vector()
   {
-      srand(time(0) + clock());
+      srand(time(0));
       for (size_t i = 0; i < sz; i++)
           (*this)[i] = rand() % 200 - 100;
   }
@@ -163,12 +166,12 @@ public:
           tmp[i] = (*this)[i] - v[i];
       return tmp;
   }
-  T operator*(const TDynamicVector& v) noexcept(noexcept(T()))
+  T operator*(const TDynamicVector& v)
   {
       if (sz != v.sz) throw exception("Sizes of vectors should be equal");
       T tmp = 0;
       for (size_t i = 0; i < v.sz; i++)
-          tmp += (*this)[i] * v[i];
+      tmp += (*this)[i] * v[i];
       return tmp;
   }
 
@@ -215,8 +218,10 @@ public:
   //заполнение случайными числами (int)
   void set_rand_matrix() 
   {
-      for (size_t i = 0; i < sz; i++)
-          (*this)[i].set_rand_vector();
+      srand(time(0));
+      for (size_t i = 0; i < sz; i++)             //почему то при вызове set_rand_vector                                      
+          for (size_t j = 0; j < sz; j++)         //заполняет все строки одним и тем же случаным вектором  
+              (*this)[i][j] = rand() % 200 - 100;
   }
 
   //гетер размера
