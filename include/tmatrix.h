@@ -27,13 +27,13 @@ protected:
 public:
   TDynamicVector(size_t size = 1) : sz(size)
   {
-    if (sz == 0 || sz > 100000000)
+    if (sz == 0 || sz > MAX_VECTOR_SIZE)
       throw out_of_range("Vector size should be greater than zero and less than 100000000");
     pMem = new T[sz]();// {}; // У типа T д.б. констуктор по умолчанию
   }
   TDynamicVector(T* arr, size_t s) : sz(s)
   {
-    if (sz == 0 || sz > 100000000)
+    if (sz == 0 || sz > MAX_VECTOR_SIZE)
         throw out_of_range("Array size should be greater than zero and less than 100000000");
     assert(arr != nullptr && "TDynamicVector ctor requires non-nullptr arg");
     pMem = new T[sz];
@@ -263,8 +263,8 @@ public:
   // матрично-матричные операции
   TDynamicMatrix operator+(const TDynamicMatrix& m)
   {
-      //if (sz != m.sz)
-      //    throw exception("Sizes of matrices should be equal");
+      if (sz != m.sz)
+          throw exception("Sizes of matrices should be equal");
       TDynamicMatrix<T> tmp(sz);
       for (size_t i = 0; i < sz; i++)
           tmp[i] = (*this)[i] + m[i];
@@ -272,8 +272,8 @@ public:
   }
   TDynamicMatrix operator-(const TDynamicMatrix& m)
   {
-      //if (sz != m.sz)
-         // throw exception("Sizes of matrices should be equal");
+      if (sz != m.sz)
+          throw exception("Sizes of matrices should be equal");
       TDynamicMatrix<T> tmp(sz);
       for (size_t i = 0; i < sz; i++)
           tmp[i] = (*this)[i] - m[i];
